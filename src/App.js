@@ -6,7 +6,7 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import loadingBox from "./components/loadingBox";
+
 
 function App() {
   return (

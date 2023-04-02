@@ -4,7 +4,7 @@ import LoadingBox from "../components/loadingBox";
 import "./home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { listUsers } from "../components/actions/userActions";
-import { Box, Button, Paper, Typography } from "@material-ui/core";
+// import { Box, Button, Paper, Typography } from "@material-ui/core";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -39,10 +39,10 @@ export default function Home() {
             <div className="card-body">
               <h5 className="card-title">{i?.show?.name}</h5>
               <p className="card-text">
-              <p class="card-text">Ratings:{i?.show?.rating?.average}</p>
-              <small class="text-muted">Language:{i?.show?.language}</small>
+              <p className="card-text">Ratings:{i?.show?.rating?.average}</p>
+              <small className="text-muted">Language:{i?.show?.language}</small>
             <br></br>
-            <small class="text-muted">Premiered:{i?.show?.premiered}</small>
+            <small className="text-muted">Premiered:{i?.show?.premiered}</small>
               </p>
     
               <a  onClick={(e)=>{
