@@ -4,22 +4,38 @@ import LoadingBox from "../components/loadingBox";
 import "./home.css";
 import { useDispatch, useSelector } from "react-redux";
 import { listUsers } from "../components/actions/userActions";
-// import { Box, Button, Paper, Typography } from "@material-ui/core";
 
 export default function Home() {
   const dispatch = useDispatch();
 
-  const [buttonClicked, setButtonClicked] = useState(false);
   const navigate = useNavigate();
+  const [searchKeyword, setSearchKeyword] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
 
   const userList = useSelector((state) => state.userList);
-  const { loading, error, data } = userList;
-  console.log({userList},"=====",userList.users)
+  const { loading, error, users } = userList;
   useEffect(() => {
     dispatch(listUsers());
   }, [dispatch]);
 
- 
+  useEffect(() => {
+    
+    if (searchKeyword) {
+      console.log({users})
+      const results = users?.filter((user) => {
+        return (
+          user.id?.toString().includes(searchKeyword) ||
+          user.title?.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          user.completed
+            ?.toString().toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+      });
+      console.log({results})
+      setSearchResults(results);
+    } else {
+      setSearchResults(users);
+    }
+  }, [searchKeyword, users]);
 
   return (
     <div>
@@ -28,31 +44,56 @@ export default function Home() {
       ) : error ? (
         <h2>Error Occured</h2>
       ) : (
-
-        <div 
-          className="home"
-        >
-          {userList?.users&& userList?.users?.map((i)=>(<div className="card" 
-          style={{width: "18rem", margin:"5px"}}
-          >
-            <img className="card-img-top" height="250px" src={i?.show?.image?.original?i?.show?.image?.original:"https://cdn1.vectorstock.com/i/1000x1000/67/65/realistic-cinema-movie-poster-template-vector-5146765.jpg"}  alt="Card image cap" />
-            <div className="card-body">
-              <h5 className="card-title">{i?.show?.name}</h5>
-              <p className="card-text">
-              <p className="card-text">Ratings:{i?.show?.rating?.average}</p>
-              <small className="text-muted">Language:{i?.show?.language}</small>
-            <br></br>
-            <small className="text-muted">Premiered:{i?.show?.premiered}</small>
-              </p>
-    
-              <a  onClick={(e)=>{
-                navigate(`/summary/${i.show.id}`)
-                }} className="btn btn-primary">
-                Details..
-              </a>
+        <div className="home">
+               
+          {users && (
+            <div>
+                      <form class="d-flex my-3">
+                  <input
+                    class="form-control me-2"
+                    type="search"
+                    placeholder="Search"
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    aria-label="Search"
+                  />
+                </form>
+              <h1 className="my-3">List of user</h1>
+ 
+              <table class="table caption-top table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Todo Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {searchResults?.map((i) => (
+                    <tr>
+                      {/* <th scope="row">1</th> */}
+                      <td>{i.id}</td>
+                      <td>{i.title}</td>
+                      <td>{i.completed === true ? "True" : "False"}</td>
+                      <td>
+                        <button
+                          type="button"
+                          class="btn btn-primary"
+                          onClick={(e) => {
+                            navigate(`/summary/${i.id}`);
+                          }}
+                        >
+                          View User
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>))}     
-       </div>
+          )}
+        </div>
       )}
     </div>
   );

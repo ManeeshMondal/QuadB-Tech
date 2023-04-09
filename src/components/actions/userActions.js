@@ -15,7 +15,7 @@ export const listUsers = () => async (dispatch) => {
   try {
     const {
       data:  data ,
-    } = await Axios.get(`https://api.tvmaze.com/search/shows?q=all`);
+    } = await Axios.get(`https://jsonplaceholder.typicode.com/todos`);
     console.log("data", data);
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -30,12 +30,12 @@ export const userDetails = (id) => async (dispatch) => {
   try {
     const {
       data:  data ,
-    } = await Axios.get(`https://api.tvmaze.com/search/shows?q=all`);
+    } = await Axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
     console.log("data", data);
-      const temp = data?.filter((i) => i.show.id == id);
-       console.log({ temp });
+      // const temp = data?.filter((i) => i.show.id == id);
+      //  console.log({ temp });
     
-    dispatch({ type: USER_DETAILS_SUCCESS, payload: temp[0] });
+    dispatch({ type: USER_DETAILS_SUCCESS, payload:data });
   } catch (error) {
     dispatch({ type: USER_DETAILS_FAIL, payload: error.message });
   }
